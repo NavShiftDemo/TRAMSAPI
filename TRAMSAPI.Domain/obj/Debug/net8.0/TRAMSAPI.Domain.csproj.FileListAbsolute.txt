@@ -1,0 +1,11 @@
+D:\TRAMSAPI\TRAMSAPI.Domain\bin\Debug\net8.0\TRAMSAPI.Domain.deps.json
+D:\TRAMSAPI\TRAMSAPI.Domain\bin\Debug\net8.0\TRAMSAPI.Domain.dll
+D:\TRAMSAPI\TRAMSAPI.Domain\bin\Debug\net8.0\TRAMSAPI.Domain.pdb
+D:\TRAMSAPI\TRAMSAPI.Domain\obj\Debug\net8.0\TRAMSAPI.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\TRAMSAPI\TRAMSAPI.Domain\obj\Debug\net8.0\TRAMSAPI.Domain.AssemblyInfoInputs.cache
+D:\TRAMSAPI\TRAMSAPI.Domain\obj\Debug\net8.0\TRAMSAPI.Domain.AssemblyInfo.cs
+D:\TRAMSAPI\TRAMSAPI.Domain\obj\Debug\net8.0\TRAMSAPI.Domain.csproj.CoreCompileInputs.cache
+D:\TRAMSAPI\TRAMSAPI.Domain\obj\Debug\net8.0\TRAMSAPI.Domain.dll
+D:\TRAMSAPI\TRAMSAPI.Domain\obj\Debug\net8.0\refint\TRAMSAPI.Domain.dll
+D:\TRAMSAPI\TRAMSAPI.Domain\obj\Debug\net8.0\TRAMSAPI.Domain.pdb
+D:\TRAMSAPI\TRAMSAPI.Domain\obj\Debug\net8.0\ref\TRAMSAPI.Domain.dll

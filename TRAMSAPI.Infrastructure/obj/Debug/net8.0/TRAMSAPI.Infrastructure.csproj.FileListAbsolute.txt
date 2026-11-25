@@ -1,0 +1,17 @@
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\bin\Debug\net8.0\TRAMSAPI.Infrastructure.deps.json
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\bin\Debug\net8.0\TRAMSAPI.Infrastructure.dll
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\bin\Debug\net8.0\TRAMSAPI.Infrastructure.pdb
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\bin\Debug\net8.0\TRAMSAPI.Application.dll
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\bin\Debug\net8.0\TRAMSAPI.Domain.dll
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\bin\Debug\net8.0\TRAMSAPI.Application.pdb
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\bin\Debug\net8.0\TRAMSAPI.Domain.pdb
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\obj\Debug\net8.0\TRAMSAPI.Infrastructure.csproj.AssemblyReference.cache
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\obj\Debug\net8.0\TRAMSAPI.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\obj\Debug\net8.0\TRAMSAPI.Infrastructure.AssemblyInfoInputs.cache
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\obj\Debug\net8.0\TRAMSAPI.Infrastructure.AssemblyInfo.cs
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\obj\Debug\net8.0\TRAMSAPI.Infrastructure.csproj.CoreCompileInputs.cache
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\obj\Debug\net8.0\TRAMSAPI.Infrastructure.csproj.CopyComplete
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\obj\Debug\net8.0\TRAMSAPI.Infrastructure.dll
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\obj\Debug\net8.0\refint\TRAMSAPI.Infrastructure.dll
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\obj\Debug\net8.0\TRAMSAPI.Infrastructure.pdb
+D:\TRAMSAPI\TRAMSAPI.Infrastructure\obj\Debug\net8.0\ref\TRAMSAPI.Infrastructure.dll

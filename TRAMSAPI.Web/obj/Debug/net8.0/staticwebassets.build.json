@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "XtI8pJ7OOB83SLMFqPnPdZ56LKXaGKZF1azfCfQ2utk=",
+  "Source": "TRAMSAPI.Web",
+  "BasePath": "_content/TRAMSAPI.Web",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

@@ -1,0 +1,251 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\TRAMSAPI\\TRAMSAPI.Web\\TRAMSAPI.Web.csproj": {}
+  },
+  "projects": {
+    "D:\\TRAMSAPI\\TRAMSAPI.Application\\TRAMSAPI.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\TRAMSAPI\\TRAMSAPI.Application\\TRAMSAPI.Application.csproj",
+        "projectName": "TRAMSAPI.Application",
+        "projectPath": "D:\\TRAMSAPI\\TRAMSAPI.Application\\TRAMSAPI.Application.csproj",
+        "packagesPath": "C:\\Users\\harsh\\.nuget\\packages\\",
+        "outputPath": "D:\\TRAMSAPI\\TRAMSAPI.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\harsh\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "D:\\TRAMSAPI\\TRAMSAPI.Domain\\TRAMSAPI.Domain.csproj": {
+                "projectPath": "D:\\TRAMSAPI\\TRAMSAPI.Domain\\TRAMSAPI.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\TRAMSAPI\\TRAMSAPI.Domain\\TRAMSAPI.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\TRAMSAPI\\TRAMSAPI.Domain\\TRAMSAPI.Domain.csproj",
+        "projectName": "TRAMSAPI.Domain",
+        "projectPath": "D:\\TRAMSAPI\\TRAMSAPI.Domain\\TRAMSAPI.Domain.csproj",
+        "packagesPath": "C:\\Users\\harsh\\.nuget\\packages\\",
+        "outputPath": "D:\\TRAMSAPI\\TRAMSAPI.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\harsh\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\TRAMSAPI\\TRAMSAPI.Infrastructure\\TRAMSAPI.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\TRAMSAPI\\TRAMSAPI.Infrastructure\\TRAMSAPI.Infrastructure.csproj",
+        "projectName": "TRAMSAPI.Infrastructure",
+        "projectPath": "D:\\TRAMSAPI\\TRAMSAPI.Infrastructure\\TRAMSAPI.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\harsh\\.nuget\\packages\\",
+        "outputPath": "D:\\TRAMSAPI\\TRAMSAPI.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\harsh\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "D:\\TRAMSAPI\\TRAMSAPI.Application\\TRAMSAPI.Application.csproj": {
+                "projectPath": "D:\\TRAMSAPI\\TRAMSAPI.Application\\TRAMSAPI.Application.csproj"
+              },
+              "D:\\TRAMSAPI\\TRAMSAPI.Domain\\TRAMSAPI.Domain.csproj": {
+                "projectPath": "D:\\TRAMSAPI\\TRAMSAPI.Domain\\TRAMSAPI.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\TRAMSAPI\\TRAMSAPI.Web\\TRAMSAPI.Web.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\TRAMSAPI\\TRAMSAPI.Web\\TRAMSAPI.Web.csproj",
+        "projectName": "TRAMSAPI.Web",
+        "projectPath": "D:\\TRAMSAPI\\TRAMSAPI.Web\\TRAMSAPI.Web.csproj",
+        "packagesPath": "C:\\Users\\harsh\\.nuget\\packages\\",
+        "outputPath": "D:\\TRAMSAPI\\TRAMSAPI.Web\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\harsh\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "D:\\TRAMSAPI\\TRAMSAPI.Application\\TRAMSAPI.Application.csproj": {
+                "projectPath": "D:\\TRAMSAPI\\TRAMSAPI.Application\\TRAMSAPI.Application.csproj"
+              },
+              "D:\\TRAMSAPI\\TRAMSAPI.Infrastructure\\TRAMSAPI.Infrastructure.csproj": {
+                "projectPath": "D:\\TRAMSAPI\\TRAMSAPI.Infrastructure\\TRAMSAPI.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.4.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

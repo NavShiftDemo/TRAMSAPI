@@ -1,0 +1,15 @@
+D:\TRAMSAPI\TRAMSAPI.Application\bin\Debug\net8.0\TRAMSAPI.Application.deps.json
+D:\TRAMSAPI\TRAMSAPI.Application\bin\Debug\net8.0\TRAMSAPI.Application.dll
+D:\TRAMSAPI\TRAMSAPI.Application\bin\Debug\net8.0\TRAMSAPI.Application.pdb
+D:\TRAMSAPI\TRAMSAPI.Application\bin\Debug\net8.0\TRAMSAPI.Domain.dll
+D:\TRAMSAPI\TRAMSAPI.Application\bin\Debug\net8.0\TRAMSAPI.Domain.pdb
+D:\TRAMSAPI\TRAMSAPI.Application\obj\Debug\net8.0\TRAMSAPI.Application.csproj.AssemblyReference.cache
+D:\TRAMSAPI\TRAMSAPI.Application\obj\Debug\net8.0\TRAMSAPI.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\TRAMSAPI\TRAMSAPI.Application\obj\Debug\net8.0\TRAMSAPI.Application.AssemblyInfoInputs.cache
+D:\TRAMSAPI\TRAMSAPI.Application\obj\Debug\net8.0\TRAMSAPI.Application.AssemblyInfo.cs
+D:\TRAMSAPI\TRAMSAPI.Application\obj\Debug\net8.0\TRAMSAPI.Application.csproj.CoreCompileInputs.cache
+D:\TRAMSAPI\TRAMSAPI.Application\obj\Debug\net8.0\TRAMSAPI.Application.csproj.CopyComplete
+D:\TRAMSAPI\TRAMSAPI.Application\obj\Debug\net8.0\TRAMSAPI.Application.dll
+D:\TRAMSAPI\TRAMSAPI.Application\obj\Debug\net8.0\refint\TRAMSAPI.Application.dll
+D:\TRAMSAPI\TRAMSAPI.Application\obj\Debug\net8.0\TRAMSAPI.Application.pdb
+D:\TRAMSAPI\TRAMSAPI.Application\obj\Debug\net8.0\ref\TRAMSAPI.Application.dll
