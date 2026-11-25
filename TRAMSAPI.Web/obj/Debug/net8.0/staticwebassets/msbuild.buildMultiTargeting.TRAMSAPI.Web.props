@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\TRAMSAPI.Web.props" />
-</Project>
