@@ -12,7 +12,8 @@ public class User
     public string PhoneNo { get; set; } = string.Empty;
     public string? AlternatePhoneNo { get; set; }
     public string? Address { get; set; }
-    public string? ProfileImageUrl { get; set; }
+    public byte[]? ProfileImage { get; set; }
+    public string? ProfileImageMime { get; set; }
     public string PasswordHash { get; set; } = string.Empty;
     public bool IsSystemUser { get; set; } = false;
     public bool IsActive { get; set; } = true;
