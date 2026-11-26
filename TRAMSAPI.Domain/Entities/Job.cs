@@ -7,8 +7,8 @@ public class Job
     public long VehicleId { get; set; }
     public long DriverId { get; set; }
     public long CustomerId { get; set; }
-    public int From { get; set; } = string.Empty;
-    public int To { get; set; } = string.Empty;
+    public int From { get; set; }
+    public int? To { get; set; }
     public int? AdditionalDetails { get; set; }
     public decimal TotalAmount { get; set; }
     public string JobKey { get; set; } = string.Empty;

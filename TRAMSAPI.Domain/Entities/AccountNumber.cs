@@ -6,7 +6,7 @@ public class AccountNumber
     public long TenantId { get; set; }
     public long UserId { get; set; }
     public string AccountNo { get; set; } = string.Empty;
-    public int Nonencrypted { get; set; } = string.Empty;
+    public int Nonencrypted { get; set; }
     public string BankName { get; set; } = string.Empty;
     public string IFSC { get; set; } = string.Empty;
     public string BranchName { get; set; } = string.Empty;
