@@ -1,0 +1,501 @@
+================================================================================
+TRAMSAPI - DATABASE TABLE & COLUMN STRUCTURE
+================================================================================
+Prefix: tb_trams_
+Case Convention: Lowercase Snake Case (table names & column names)
+Enum Handling: Stored as Numbers / Integers (not strings)
+================================================================================
+
+--------------------------------------------------------------------------------
+1. tb_trams_tenant_master (TenantMaster)
+--------------------------------------------------------------------------------
+Description: Stores registered company / business tenants.
+Columns:
+  * tenant_id            : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * business_name        : VARCHAR(150), NOT NULL
+  * tenant_code          : VARCHAR(50), NOT NULL, UNIQUE
+  * company_email        : VARCHAR(150), NULL
+  * company_phone_no     : VARCHAR(20), NULL
+  * is_active            : BOOLEAN, NOT NULL, DEFAULT true
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NULL
+  * updated_at           : TIMESTAMP WITH TIME ZONE, NULL
+  * updated_by           : BIGINT, NULL
+
+--------------------------------------------------------------------------------
+2. tb_trams_user (User)
+--------------------------------------------------------------------------------
+Description: Stores user accounts, contact details, credentials and system flag.
+Columns:
+  * user_id              : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL, FK -> tb_trams_tenant_master(tenant_id)
+  * name                 : VARCHAR(150), NOT NULL
+  * email                : VARCHAR(150), NULL
+  * phone_no             : VARCHAR(20), NOT NULL
+  * alternate_phone_no   : VARCHAR(20), NULL
+  * address              : VARCHAR(255), NULL
+  * profile_image        : BYTEA, NULL
+  * profile_image_mime   : VARCHAR(100), NULL
+  * password_hash        : VARCHAR(255), NOT NULL (Hashed with BCrypt)
+  * is_system_user       : BOOLEAN, NOT NULL, DEFAULT false
+  * is_active            : BOOLEAN, NOT NULL, DEFAULT true
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NULL
+  * updated_at           : TIMESTAMP WITH TIME ZONE, NULL
+  * updated_by           : BIGINT, NULL
+
+--------------------------------------------------------------------------------
+3. tb_trams_role (Role)
+--------------------------------------------------------------------------------
+Description: Stores role definitions for role-based access control.
+Columns:
+  * role_id              : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL, FK -> tb_trams_tenant_master(tenant_id)
+  * role_name            : VARCHAR(100), NOT NULL
+  * description          : VARCHAR(255), NULL
+  * is_active            : BOOLEAN, NOT NULL, DEFAULT true
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NULL
+
+--------------------------------------------------------------------------------
+4. tb_trams_user_role_mapping (UserRoleMapping)
+--------------------------------------------------------------------------------
+Description: Connects users to assigned roles within their tenant.
+Columns:
+  * user_role_id         : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL, FK -> tb_trams_tenant_master(tenant_id)
+  * user_id              : BIGINT, NOT NULL, FK -> tb_trams_user(user_id)
+  * role_id              : BIGINT, NOT NULL, FK -> tb_trams_role(role_id)
+  * is_active            : BOOLEAN, NOT NULL, DEFAULT true
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NULL
+
+--------------------------------------------------------------------------------
+5. tb_trams_driver_operator_detail (DriverOperatorDetail)
+--------------------------------------------------------------------------------
+Description: Additional details for driver or operator users.
+Columns:
+  * driver_id            : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL, FK -> tb_trams_tenant_master(tenant_id)
+  * user_id              : BIGINT, NOT NULL, UNIQUE, FK -> tb_trams_user(user_id)
+  * license_number       : VARCHAR(50), NOT NULL
+  * license_expiry_date  : DATE, NOT NULL
+  * license_image        : BYTEA, NULL
+  * badge_number         : VARCHAR(50), NULL
+  * experience_years     : INTEGER, NOT NULL, DEFAULT 0
+  * is_active            : BOOLEAN, NOT NULL, DEFAULT true
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NOT NULL
+
+--------------------------------------------------------------------------------
+6. tb_trams_menu_master (MenuMaster)
+--------------------------------------------------------------------------------
+Description: Application navigation menu hierarchy definitions.
+Columns:
+  * menu_id              : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * menu_name            : VARCHAR(100), NOT NULL
+  * icon                 : VARCHAR(100), NULL
+  * route_url            : VARCHAR(255), NULL
+  * parent_menu_id       : BIGINT, NULL, FK -> tb_trams_menu_master(menu_id)
+  * display_order        : INTEGER, NOT NULL, DEFAULT 0
+  * is_active            : BOOLEAN, NOT NULL, DEFAULT true
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NULL
+
+--------------------------------------------------------------------------------
+7. tb_trams_action_master (ActionMaster)
+--------------------------------------------------------------------------------
+Description: System permission actions (e.g., View, Create, Edit, Delete).
+Columns:
+  * action_id            : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * action_name          : VARCHAR(100), NOT NULL
+  * action_code          : VARCHAR(50), NOT NULL
+  * is_active            : BOOLEAN, NOT NULL, DEFAULT true
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NULL
+
+--------------------------------------------------------------------------------
+8. tb_trams_access_permission_mapping (AccessPermissionMapping)
+--------------------------------------------------------------------------------
+Description: Grants role/user permissions to specific menu actions.
+Columns:
+  * permission_id        : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL, FK -> tb_trams_tenant_master(tenant_id)
+  * role_id              : BIGINT, NULL, FK -> tb_trams_role(role_id)
+  * user_id              : BIGINT, NULL, FK -> tb_trams_user(user_id)
+  * menu_id              : BIGINT, NOT NULL, FK -> tb_trams_menu_master(menu_id)
+  * action_id            : BIGINT, NOT NULL, FK -> tb_trams_action_master(action_id)
+  * is_allowed           : BOOLEAN, NOT NULL, DEFAULT true
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NULL
+
+--------------------------------------------------------------------------------
+9. tb_trams_user_login_history (UserLoginHistory)
+--------------------------------------------------------------------------------
+Description: User login activity audit log.
+Columns:
+  * login_history_id     : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NULL, FK -> tb_trams_tenant_master(tenant_id)
+  * user_id              : BIGINT, NULL, FK -> tb_trams_user(user_id)
+  * event_type           : INTEGER, NOT NULL (Enum EventType: 1=LOGIN, 2=LOGOUT, 3=FAILED_LOGIN, 4=REFRESH_TOKEN)
+  * event_time           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * ip_address           : VARCHAR(50), NULL
+  * device_info          : VARCHAR(255), NULL
+
+--------------------------------------------------------------------------------
+10. tb_trams_user_otp_verification (UserOtpVerification)
+--------------------------------------------------------------------------------
+Description: OTP authentication and verification tracking.
+Columns:
+  * otp_id               : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * user_id              : BIGINT, NOT NULL, FK -> tb_trams_user(user_id)
+  * otp_hash             : VARCHAR(255), NOT NULL
+  * purpose              : INTEGER, NOT NULL (Enum Purpose: 1=RESET_PASSWORD, 2=LOGIN)
+  * is_verified          : BOOLEAN, NOT NULL, DEFAULT false
+  * attempt_count        : INTEGER, NOT NULL, DEFAULT 0
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+
+--------------------------------------------------------------------------------
+11. tb_trams_menu_action_mapping (MenuActionMapping)
+--------------------------------------------------------------------------------
+Description: Connects available actions to specific menus.
+Columns:
+  * menu_action_mapping_id: BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * menu_id              : BIGINT, NOT NULL, FK -> tb_trams_menu_master(menu_id)
+  * action_id            : BIGINT, NOT NULL, FK -> tb_trams_action_master(action_id)
+  * is_active            : BOOLEAN, NOT NULL, DEFAULT true
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NULL
+
+--------------------------------------------------------------------------------
+12. tb_trams_vehicle_category (VehicleCategory)
+--------------------------------------------------------------------------------
+Description: Top-level vehicle category classifications (e.g. Tractor, Harvester).
+Columns:
+  * vehicle_category_id  : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * category_name        : VARCHAR(100), NOT NULL
+  * description          : VARCHAR(255), NULL
+  * is_active            : BOOLEAN, NOT NULL, DEFAULT true
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NOT NULL
+
+--------------------------------------------------------------------------------
+13. tb_trams_vehicle_type (VehicleType)
+--------------------------------------------------------------------------------
+Description: Specific types of vehicles belonging to a category.
+Columns:
+  * vehicle_type_id      : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * vehicle_category_id  : BIGINT, NOT NULL, FK -> tb_trams_vehicle_category(vehicle_category_id)
+  * type_name            : VARCHAR(100), NOT NULL
+  * description          : VARCHAR(255), NULL
+  * is_active            : BOOLEAN, NOT NULL, DEFAULT true
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NOT NULL
+
+--------------------------------------------------------------------------------
+14. tb_trams_vehicle_brand (VehicleBrand)
+--------------------------------------------------------------------------------
+Description: Vehicle manufacturers and brands.
+Columns:
+  * vehicle_brand_id     : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * brand_name           : VARCHAR(100), NOT NULL
+  * description          : VARCHAR(255), NULL
+  * is_active            : BOOLEAN, NOT NULL, DEFAULT true
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NOT NULL
+
+--------------------------------------------------------------------------------
+15. tb_trams_fuel_type (FuelType)
+--------------------------------------------------------------------------------
+Description: Fuel type classifications (e.g. Diesel, Petrol, Electric).
+Columns:
+  * fuel_type_id         : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * fuel_name            : VARCHAR(50), NOT NULL
+  * is_active            : BOOLEAN, NOT NULL, DEFAULT true
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NOT NULL
+
+--------------------------------------------------------------------------------
+16. tb_trams_vehicle (Vehicle)
+--------------------------------------------------------------------------------
+Description: Vehicle master catalog.
+Columns:
+  * vehicle_id           : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * vehicle_type_id      : BIGINT, NOT NULL, FK -> tb_trams_vehicle_type(vehicle_type_id)
+  * vehicle_brand_id     : BIGINT, NOT NULL, FK -> tb_trams_vehicle_brand(vehicle_brand_id)
+  * fuel_type_id         : BIGINT, NOT NULL, FK -> tb_trams_fuel_type(fuel_type_id)
+  * vehicle_number       : VARCHAR(50), NOT NULL
+  * model_name           : VARCHAR(100), NULL
+  * manufacturing_year   : INTEGER, NULL
+  * purchase_date        : DATE, NULL
+  * purchase_price       : NUMERIC(18,2), NULL
+  * current_kilometers   : NUMERIC(18,2), NULL
+  * top_speed            : NUMERIC(18,2), NULL
+  * is_implement         : BOOLEAN, NOT NULL, DEFAULT false
+  * ownership_type       : INTEGER, NOT NULL (Enum OwnerShipType: 1=OWNED, 2=RENTED, 3=LEASED)
+  * vehicle_status       : INTEGER, NOT NULL (Enum Status: 1=AVAILABLE, 2=ASSIGNED, 3=MAINTENANCE, 4=INACTIVE)
+  * image_url            : VARCHAR(500), NULL
+  * description          : VARCHAR(500), NULL
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NOT NULL
+  * updated_at           : TIMESTAMP WITH TIME ZONE, NULL
+  * updated_by           : BIGINT, NULL
+
+--------------------------------------------------------------------------------
+17. tb_trams_implementation_master (ImplementationMaster)
+--------------------------------------------------------------------------------
+Description: Agricultural implement equipment categories/masters.
+Columns:
+  * implementation_master_id : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * vehicle_category_id  : BIGINT, NULL
+  * implementation_name  : VARCHAR(150), NOT NULL
+  * description          : VARCHAR(255), NULL
+  * is_active            : BOOLEAN, NOT NULL, DEFAULT true
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NOT NULL
+
+--------------------------------------------------------------------------------
+18. tb_trams_implement_asset (ImplementAsset)
+--------------------------------------------------------------------------------
+Description: Physical implement assets and attachments.
+Columns:
+  * implement_asset_id   : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * implement_master_id  : BIGINT, NULL
+  * implement_code       : VARCHAR(50), NOT NULL
+  * name                 : VARCHAR(150), NULL
+  * ownership_type       : INTEGER, NOT NULL (Enum OwnerShipType: 1=OWNED, 2=RENTED, 3=LEASED)
+  * status               : INTEGER, NOT NULL (Enum Status: 1=AVAILABLE, 2=ASSIGNED, 3=MAINTENANCE, 4=INACTIVE)
+  * image_url            : VARCHAR(500), NULL
+  * description          : VARCHAR(500), NULL
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NOT NULL
+
+--------------------------------------------------------------------------------
+19. tb_trams_maintenance_type (MaintenanceType)
+--------------------------------------------------------------------------------
+Description: Maintenance classifications (e.g. Regular Service, Oil Change).
+Columns:
+  * maintenance_type_id  : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * maintenance_name     : VARCHAR(100), NOT NULL
+  * description          : VARCHAR(255), NULL
+  * is_active            : BOOLEAN, NOT NULL, DEFAULT true
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NOT NULL
+
+--------------------------------------------------------------------------------
+20. tb_trams_vehicle_maintenance_record (VehicleMaintenanceRecord)
+--------------------------------------------------------------------------------
+Description: Maintenance and service logs for vehicles.
+Columns:
+  * vehicle_maintenance_record_id: BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * vehicle_id           : BIGINT, NOT NULL, FK -> tb_trams_vehicle(vehicle_id)
+  * maintenance_type_id  : BIGINT, NOT NULL, FK -> tb_trams_maintenance_type(maintenance_type_id)
+  * service_date         : DATE, NOT NULL
+  * service_reading      : NUMERIC(18,2), NULL
+  * service_performed_by : VARCHAR(150), NULL
+  * service_provider_name: VARCHAR(150), NULL
+  * description          : VARCHAR(500), NULL
+  * next_service_reading : NUMERIC(18,2), NULL
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NOT NULL
+
+--------------------------------------------------------------------------------
+21. tb_trams_expense_category (ExpenseCategory)
+--------------------------------------------------------------------------------
+Description: Expense categories (e.g. Fuel, Maintenance, Spare Parts).
+Columns:
+  * expense_category_id  : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * category_name        : VARCHAR(100), NOT NULL
+  * description          : VARCHAR(255), NULL
+  * is_active            : BOOLEAN, NOT NULL, DEFAULT true
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NOT NULL
+
+--------------------------------------------------------------------------------
+22. tb_trams_expense (Expense)
+--------------------------------------------------------------------------------
+Description: Financial expense entries.
+Columns:
+  * expense_id           : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * expense_category_id  : BIGINT, NOT NULL, FK -> tb_trams_expense_category(expense_category_id)
+  * is_for_vehicle       : BOOLEAN, NOT NULL, DEFAULT true
+  * vehicle_id           : BIGINT, NULL, FK -> tb_trams_vehicle(vehicle_id)
+  * vehicle_maintenance_record_id: BIGINT, NULL, FK -> tb_trams_vehicle_maintenance_record(vehicle_maintenance_record_id)
+  * expense_date         : DATE, NOT NULL
+  * title                : VARCHAR(150), NOT NULL
+  * amount               : NUMERIC(18,2), NOT NULL
+  * payment_mode         : VARCHAR(50), NOT NULL
+  * vendor_name          : VARCHAR(150), NULL
+  * bill_number          : VARCHAR(100), NULL
+  * description          : VARCHAR(500), NULL
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NOT NULL
+
+--------------------------------------------------------------------------------
+23. tb_trams_rate_card (RateCard)
+--------------------------------------------------------------------------------
+Description: Pricing rate cards for vehicle and implement services.
+Columns:
+  * rate_card_id         : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * vehicle_id           : BIGINT, NOT NULL, FK -> tb_trams_vehicle(vehicle_id)
+  * implement_asset_id   : BIGINT, NULL, FK -> tb_trams_implement_asset(implement_asset_id)
+  * calculation_type_1   : INTEGER, NOT NULL (Enum UnitsType: 1=HOURS, 2=DAYS, 3=MONTHS, 4=KM, 5=ACRES, 6=TONS)
+  * calculation_type_2   : INTEGER, NULL (Enum UnitsType: 1=HOURS, 2=DAYS, 3=MONTHS, 4=KM, 5=ACRES, 6=TONS)
+  * amount               : NUMERIC(18,2), NOT NULL
+  * description          : VARCHAR(500), NULL
+  * waiting_time_charge  : NUMERIC(18,2), NULL
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NULL
+  * updated_at           : TIMESTAMP WITH TIME ZONE, NULL
+  * updated_by           : BIGINT, NULL
+
+--------------------------------------------------------------------------------
+24. tb_trams_job (Job)
+--------------------------------------------------------------------------------
+Description: Job orders, assignments and dispatches.
+Columns:
+  * job_id               : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * vehicle_id           : BIGINT, NOT NULL, FK -> tb_trams_vehicle(vehicle_id)
+  * driver_id            : BIGINT, NOT NULL, FK -> tb_trams_user(user_id)
+  * customer_id          : BIGINT, NOT NULL
+  * from                 : INTEGER, NOT NULL
+  * to                   : INTEGER, NULL
+  * additional_details   : INTEGER, NULL
+  * total_amount         : NUMERIC(18,2), NOT NULL
+  * job_key              : VARCHAR(100), NOT NULL
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NULL
+  * updated_at           : TIMESTAMP WITH TIME ZONE, NULL
+  * updated_by           : BIGINT, NULL
+
+--------------------------------------------------------------------------------
+25. tb_trams_additional_job (AdditionalJob)
+--------------------------------------------------------------------------------
+Description: Waiting time or additional work records for jobs.
+Columns:
+  * waiting_id           : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * job_id               : BIGINT, NOT NULL, FK -> tb_trams_job(job_id)
+  * waiting_start_time   : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * waiting_end_time     : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * amount               : NUMERIC(18,2), NOT NULL
+  * reason               : VARCHAR(255), NULL
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NULL
+
+--------------------------------------------------------------------------------
+26. tb_trams_job_payment (JobPayment)
+--------------------------------------------------------------------------------
+Description: Payments received and settlements for jobs.
+Columns:
+  * job_payment_id       : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * job_key              : VARCHAR(100), NOT NULL
+  * collected_amount     : NUMERIC(18,2), NOT NULL
+  * discount             : NUMERIC(18,2), NULL
+  * settlement_status    : INTEGER, NULL (Enum SettlementType: 1=PENDING, 2=SETTLED, 3=FAILED, 4=CANCELLED)
+  * payment_type         : VARCHAR(50), NULL
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NULL
+  * updated_at           : TIMESTAMP WITH TIME ZONE, NULL
+  * updated_by           : BIGINT, NULL
+
+--------------------------------------------------------------------------------
+27. tb_trams_account_number (AccountNumber)
+--------------------------------------------------------------------------------
+Description: Bank account details for users/drivers/operators.
+Columns:
+  * account_id           : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * user_id              : BIGINT, NOT NULL, FK -> tb_trams_user(user_id)
+  * account_no           : VARCHAR(50), NOT NULL
+  * nonencrypted         : INTEGER, NOT NULL
+  * bank_name            : VARCHAR(100), NOT NULL
+  * ifsc                 : VARCHAR(20), NOT NULL
+  * branch_name          : VARCHAR(100), NOT NULL
+  * mobile_number        : VARCHAR(20), NOT NULL
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NULL
+
+--------------------------------------------------------------------------------
+28. tb_trams_amount_tally (AmountTally)
+--------------------------------------------------------------------------------
+Description: Cash collection tally and reconciliations.
+Columns:
+  * amount_tally_id      : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * user_id              : BIGINT, NOT NULL, FK -> tb_trams_user(user_id)
+  * amount               : NUMERIC(18,2), NOT NULL
+  * transaction_type     : INTEGER, NOT NULL (Enum TransactionType: 1=CREDIT, 2=DEBIT)
+  * incentive            : NUMERIC(18,2), NULL
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NULL
+
+--------------------------------------------------------------------------------
+29. tb_trams_salary_config (SalaryConfig)
+--------------------------------------------------------------------------------
+Description: Salary definitions and computation bases for personnel.
+Columns:
+  * salary_config_id     : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NOT NULL
+  * user_id              : BIGINT, NOT NULL, FK -> tb_trams_user(user_id)
+  * salary_amount        : NUMERIC(18,2), NOT NULL
+  * salary_type          : INTEGER, NOT NULL (Enum UnitsType: 1=HOURS, 2=DAYS, 3=MONTHS, 4=KM, 5=ACRES, 6=TONS)
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+  * created_by           : BIGINT, NULL
+
+--------------------------------------------------------------------------------
+30. tb_trams_table_list (TableList)
+--------------------------------------------------------------------------------
+Description: Master registry of all database tables (seeded automatically).
+Columns:
+  * table_list_id        : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * table_name           : VARCHAR(150), NOT NULL
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+
+--------------------------------------------------------------------------------
+31. tb_trams_data_audit (DataAudit)
+--------------------------------------------------------------------------------
+Description: Audit log tracking record changes (INSERT, UPDATE, DELETE).
+Columns:
+  * data_audit_id        : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NULL
+  * table_name           : VARCHAR(150), NOT NULL
+  * record_id            : VARCHAR(100), NOT NULL
+  * action               : INTEGER, NOT NULL (Enum AuditActionType: 1=INSERT, 2=UPDATE, 3=DELETE)
+  * old_values           : TEXT, NULL (JSON serialized old data)
+  * new_values           : TEXT, NULL (JSON serialized new data)
+  * changed_columns      : VARCHAR(500), NULL
+  * user_id              : BIGINT, NULL
+  * timestamp            : TIMESTAMP WITH TIME ZONE, NOT NULL
+
+--------------------------------------------------------------------------------
+32. tb_trams_error_log (ErrorLog)
+--------------------------------------------------------------------------------
+Description: Application exceptions and runtime error logging.
+Columns:
+  * error_log_id         : BIGINT, PRIMARY KEY, AUTO INCREMENT
+  * tenant_id            : BIGINT, NULL
+  * user_id              : BIGINT, NULL
+  * request_path         : VARCHAR(500), NULL
+  * http_method          : INTEGER, NULL (Enum HttpMethodType: 1=GET, 2=POST, 3=PUT, 4=DELETE, 5=PATCH, 6=OPTIONS, 7=HEAD)
+  * status_code          : INTEGER, NULL
+  * error_message        : TEXT, NULL
+  * exception_type       : VARCHAR(255), NULL
+  * stack_trace          : TEXT, NULL
+  * source               : VARCHAR(255), NULL
+  * created_at           : TIMESTAMP WITH TIME ZONE, NOT NULL
+================================================================================
