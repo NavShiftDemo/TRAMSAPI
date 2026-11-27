@@ -1,3 +1,5 @@
+using TRAMSAPI.Domain.Enums;
+
 namespace TRAMSAPI.Domain.Entities;
 
 /// <summary>
@@ -10,8 +12,8 @@ public class ImplementAsset
     public long? ImplementMasterId { get; set; }
     public string ImplementCode { get; set; } = string.Empty;
     public string? Name { get; set; }
-    public string OwnershipType { get; set; } = string.Empty;
-    public string Status { get; set; } = string.Empty;
+    public OwnerShipType OwnershipType { get; set; }
+    public Status Status { get; set; }
     public string? ImageUrl { get; set; }
     public string? Description { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;

@@ -1,3 +1,5 @@
+using TRAMSAPI.Domain.Enums;
+
 namespace TRAMSAPI.Domain.Entities;
 
 public class Vehicle
@@ -15,8 +17,8 @@ public class Vehicle
     public decimal? CurrentKilometers { get; set; }
     public decimal? TopSpeed { get; set; }
     public bool IsImplement { get; set; } = false;
-    public string OwnershipType { get; set; } = string.Empty;
-    public string VehicleStatus { get; set; } = string.Empty; // Available, Assigned, Maintenance, Inactive
+    public OwnerShipType OwnershipType { get; set; }
+    public Status VehicleStatus { get; set; }  // Available, Assigned, Maintenance, Inactive
     public string? ImageUrl { get; set; }
     public string? Description { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;

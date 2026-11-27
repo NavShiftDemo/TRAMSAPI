@@ -1,3 +1,5 @@
+using TRAMSAPI.Domain.Enums;
+
 namespace TRAMSAPI.Domain.Entities;
 
 public class JobPayment
@@ -7,7 +9,7 @@ public class JobPayment
     public string JobKey { get; set; } = string.Empty;
     public decimal CollectedAmount { get; set; }
     public decimal? Discount { get; set; }
-    public string? SettlementStatus { get; set; }
+    public SettlementType? SettlementStatus { get; set; }
     public string? PaymentType { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public long? CreatedBy { get; set; }
