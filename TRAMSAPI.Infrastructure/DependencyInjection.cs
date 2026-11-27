@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TRAMSAPI.Infrastructure.Persistence;
 using TRAMSAPI.Application.Interfaces;
 using TRAMSAPI.Infrastructure.Repositories;
+using TRAMSAPI.Infrastructure.Services;
 
 namespace TRAMSAPI.Infrastructure;
 
@@ -20,8 +21,13 @@ public static class DependencyInjection
                 connectionString,
                 b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
-        // Tenant Registration Repository
+        // Repositories
         services.AddScoped<ITenantRegistrationRepository, TenantRegistrationRepository>();
+        services.AddScoped<IAuthRepository, AuthRepository>();
+
+        // Infrastructure Services
+        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddScoped<IOtpNotificationService, NoOpOtpNotificationService>();
 
         return services;
     }
