@@ -45,7 +45,7 @@ public class AmountTallyConfiguration : IEntityTypeConfiguration<AmountTally>
                .HasColumnName("created_by");
 
         builder.HasOne(e => e.User)
-               .WithMany()
+               .WithMany(u => u.AmountTallies)
                .HasForeignKey(e => e.UserId)
                .OnDelete(DeleteBehavior.Restrict);
     }

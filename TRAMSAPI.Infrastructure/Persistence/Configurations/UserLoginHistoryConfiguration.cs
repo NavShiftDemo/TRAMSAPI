@@ -44,7 +44,7 @@ public class UserLoginHistoryConfiguration : IEntityTypeConfiguration<UserLoginH
                .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(e => e.User)
-               .WithMany()
+               .WithMany(u => u.LoginHistories)
                .HasForeignKey(e => e.UserId)
                .OnDelete(DeleteBehavior.Restrict);
     }

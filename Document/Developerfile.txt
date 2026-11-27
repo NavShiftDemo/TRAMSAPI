@@ -96,17 +96,17 @@ In TRAMSAPI.Web/appsettings.json:
 # Build Solution
 dotnet build
 
-# Add Initial Migration (Schema + All Seed Data created once together)
-dotnet dotnet-ef migrations add InitialCreate --project TRAMSAPI.Infrastructure --startup-project TRAMSAPI.Web --output-dir Persistence/Migrations
+# Add Migration (run from solution root E:\TRAMS\TRAMSAPI)
+dotnet ef migrations add <MigrationName> --project TRAMSAPI.Infrastructure --startup-project TRAMSAPI.Web --output-dir Persistence/Migrations
 
 # Update / Apply Migration to Database
-dotnet dotnet-ef database update --project TRAMSAPI.Infrastructure --startup-project TRAMSAPI.Web
+dotnet ef database update --project TRAMSAPI.Infrastructure --startup-project TRAMSAPI.Web
 
 # Remove Last Migration (if needed before pushing)
-dotnet dotnet-ef migrations remove --project TRAMSAPI.Infrastructure --startup-project TRAMSAPI.Web
+dotnet ef migrations remove --project TRAMSAPI.Infrastructure --startup-project TRAMSAPI.Web
 
 # Generate SQL Script for Production / Review
-dotnet dotnet-ef migrations script --project TRAMSAPI.Infrastructure --startup-project TRAMSAPI.Web -o migration.sql --idempotent
+dotnet ef migrations script --project TRAMSAPI.Infrastructure --startup-project TRAMSAPI.Web -o migration.sql --idempotent
 
 
 7. RUNNING & VERIFYING THE APPLICATION

@@ -60,7 +60,7 @@ public class AccountNumberConfiguration : IEntityTypeConfiguration<AccountNumber
                .HasColumnName("created_by");
 
         builder.HasOne(e => e.User)
-               .WithMany()
+               .WithMany(u => u.AccountNumbers)
                .HasForeignKey(e => e.UserId)
                .OnDelete(DeleteBehavior.Restrict);
     }

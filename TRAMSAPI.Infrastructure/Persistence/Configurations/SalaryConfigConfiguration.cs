@@ -41,7 +41,7 @@ public class SalaryConfigConfiguration : IEntityTypeConfiguration<SalaryConfig>
                .HasColumnName("created_by");
 
         builder.HasOne(e => e.User)
-               .WithMany()
+               .WithMany(u => u.SalaryConfigs)
                .HasForeignKey(e => e.UserId)
                .OnDelete(DeleteBehavior.Restrict);
     }

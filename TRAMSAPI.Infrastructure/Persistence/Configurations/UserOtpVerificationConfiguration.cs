@@ -42,7 +42,7 @@ public class UserOtpVerificationConfiguration : IEntityTypeConfiguration<UserOtp
                .IsRequired();
 
         builder.HasOne(e => e.User)
-               .WithMany()
+               .WithMany(u => u.OtpVerifications)
                .HasForeignKey(e => e.UserId)
                .OnDelete(DeleteBehavior.Cascade);
     }

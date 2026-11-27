@@ -1,0 +1,1 @@
+1. Migration history table not mentioned or defined.
