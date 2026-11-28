@@ -27,7 +27,7 @@ public static class DependencyInjection
 
         // Infrastructure Services
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-        services.AddScoped<IOtpNotificationService, NoOpOtpNotificationService>();
+        services.AddScoped<IOtpNotificationService, EmailNotificationService>();
 
         return services;
     }

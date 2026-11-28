@@ -27,37 +27,27 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+        // Minimal, high-performance claims payload
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
             new(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-            new(ClaimTypes.Name, user.Name),
-            new("phone_number", user.PhoneNo),
-            new("tenant_id", user.TenantId.ToString()),
-            new("is_system_user", user.IsSystemUser.ToString().ToLower()),
-            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new("user_id", user.UserId.ToString()),
+            new("tenant_id", user.TenantId.ToString())
         };
-
-        if (!string.IsNullOrWhiteSpace(user.Email))
-        {
-            claims.Add(new Claim(ClaimTypes.Email, user.Email));
-        }
-
-        if (user.Tenant != null && !string.IsNullOrWhiteSpace(user.Tenant.TenantCode))
-        {
-            claims.Add(new Claim("tenant_code", user.Tenant.TenantCode));
-        }
 
         foreach (var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
-        var expiresAt = DateTime.UtcNow.AddMinutes(expiryMinutes);
+        var createdAt = DateTime.UtcNow;
+        var expiresAt = createdAt.AddMinutes(expiryMinutes);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
+            IssuedAt = createdAt,
             Expires = expiresAt,
             Issuer = issuer,
             Audience = audience,

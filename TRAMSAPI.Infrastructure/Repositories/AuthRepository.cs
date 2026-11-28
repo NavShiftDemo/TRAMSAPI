@@ -15,13 +15,14 @@ public class AuthRepository : IAuthRepository
         _context = context;
     }
 
-    public async Task<User?> GetUserByIdentifierAsync(string identifier)
+    public async Task<User?> GetUserByEmailAsync(string email)
     {
+        var normalizedEmail = email.Trim().ToLower();
         return await _context.Users
             .Include(u => u.Tenant)
             .Include(u => u.UserRoleMappings)
                 .ThenInclude(urm => urm.Role)
-            .FirstOrDefaultAsync(u => u.Email == identifier || u.PhoneNo == identifier);
+            .FirstOrDefaultAsync(u => u.Email != null && u.Email.ToLower() == normalizedEmail);
     }
 
     public async Task<User?> GetUserByIdAsync(long userId)
@@ -48,7 +49,7 @@ public class AuthRepository : IAuthRepository
 
         foreach (var pending in pendingOtps)
         {
-            pending.AttemptCount = 99; // Invalidate
+            pending.AttemptCount = 3; // Invalidate by exhausting attempts (no magic 99)
         }
 
         await _context.UserOtpVerifications.AddAsync(otp);

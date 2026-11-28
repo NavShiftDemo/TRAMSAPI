@@ -17,6 +17,7 @@ public class AuthService : IAuthService
     private const string ResetTokenSecret = "TRAMS_RESET_PWD_SECRET_SALT_2026";
     private const int OtpValidityMinutes = 5;
     private const int MaxOtpAttempts = 3;
+    private const int OtpCooldownSeconds = 120; // 2-minute cooldown between OTP requests
 
     public AuthService(
         IAuthRepository authRepository,
@@ -29,15 +30,15 @@ public class AuthService : IAuthService
     }
 
     /// <summary>
-    /// Authenticates a user by email or phone, checks BCrypt hash, logs activity, and generates JWT.
+    /// Authenticates a user by email, checks BCrypt hash, logs activity, and generates JWT.
     /// </summary>
     public async Task<LoginResponseDto?> LoginAsync(
         LoginRequestDto request,
         string? ipAddress = null,
         string? deviceInfo = null)
     {
-        var identifier = request.Identifier.Trim();
-        var user = await _authRepository.GetUserByIdentifierAsync(identifier);
+        var email = request.Email.Trim().ToLower();
+        var user = await _authRepository.GetUserByEmailAsync(email);
 
         // 1. Check if user exists and is active
         if (user == null || !user.IsActive)
@@ -93,18 +94,39 @@ public class AuthService : IAuthService
     /// </summary>
     public async Task<(bool Success, string Message)> ForgotPasswordAsync(ForgotPasswordRequestDto request)
     {
-        var identifier = request.Identifier.Trim();
-        var user = await _authRepository.GetUserByIdentifierAsync(identifier);
+        var email = request.Email.Trim().ToLower();
+        var user = await _authRepository.GetUserByEmailAsync(email);
 
         // Security best practice: don't reveal whether user exists
         if (user == null)
         {
-            return (true, "If an account exists with this email or phone number, an OTP has been sent.");
+            return (true, "If an account exists with this email, an OTP has been sent.");
         }
 
         if (!user.IsActive)
         {
             return (false, "Account is inactive. Please contact your administrator.");
+        }
+
+        // Check 2-minute cooldown timer between OTP requests
+        var recentOtp = await _authRepository.GetLatestOtpAsync(user.UserId, Purpose.RESET_PASSWORD);
+        if (recentOtp != null)
+        {
+            var timeSinceCreation = DateTime.UtcNow - recentOtp.CreatedAt;
+            if (timeSinceCreation < TimeSpan.FromSeconds(OtpCooldownSeconds))
+            {
+                var secondsRemaining = Math.Max(1, (int)(TimeSpan.FromSeconds(OtpCooldownSeconds) - timeSinceCreation).TotalSeconds);
+
+                if (recentOtp.AttemptCount >= MaxOtpAttempts)
+                {
+                    return (false, $"Too many failed attempts. Please wait {secondsRemaining} second(s) before requesting a new OTP.");
+                }
+
+                if (!recentOtp.IsVerified)
+                {
+                    return (false, $"An OTP was recently sent. Please wait {secondsRemaining} second(s) before requesting a new code.");
+                }
+            }
         }
 
         // Generate 6-digit cryptographic random OTP code
@@ -125,12 +147,12 @@ public class AuthService : IAuthService
 
         await _authRepository.SaveOtpAsync(otpEntity);
 
-        // Send OTP via SMS or Email
+        // Send OTP via Email / SMS
         var destination = !string.IsNullOrWhiteSpace(user.Email) ? user.Email : user.PhoneNo;
         await _notificationService.SendOtpAsync(destination, otpCode, Purpose.RESET_PASSWORD);
 
-        var maskedDestination = MaskIdentifier(destination);
-        return (true, $"OTP has been sent successfully to {maskedDestination}.");
+        var maskedEmail = MaskEmail(destination);
+        return (true, $"OTP has been sent successfully to {maskedEmail}.");
     }
 
     /// <summary>
@@ -138,8 +160,8 @@ public class AuthService : IAuthService
     /// </summary>
     public async Task<(bool Success, string Message, string? ResetToken)> VerifyOtpAsync(VerifyOtpRequestDto request)
     {
-        var identifier = request.Identifier.Trim();
-        var user = await _authRepository.GetUserByIdentifierAsync(identifier);
+        var email = request.Email.Trim().ToLower();
+        var user = await _authRepository.GetUserByEmailAsync(email);
 
         if (user == null)
         {
@@ -195,8 +217,8 @@ public class AuthService : IAuthService
     /// </summary>
     public async Task<(bool Success, string Message)> ResetPasswordAsync(ResetPasswordRequestDto request)
     {
-        var identifier = request.Identifier.Trim();
-        var user = await _authRepository.GetUserByIdentifierAsync(identifier);
+        var email = request.Email.Trim().ToLower();
+        var user = await _authRepository.GetUserByEmailAsync(email);
 
         if (user == null)
         {
@@ -212,7 +234,7 @@ public class AuthService : IAuthService
 
         // Ensure the underlying OTP was indeed verified and not already consumed
         var latestOtp = await _authRepository.GetLatestOtpAsync(user.UserId, Purpose.RESET_PASSWORD);
-        if (latestOtp == null || latestOtp.OtpId != otpId || !latestOtp.IsVerified)
+        if (latestOtp == null || latestOtp.OtpId != otpId || !latestOtp.IsVerified || latestOtp.AttemptCount >= MaxOtpAttempts)
         {
             return (false, "Reset session has expired or already been used. Please request a new OTP.");
         }
@@ -233,8 +255,8 @@ public class AuthService : IAuthService
             return (false, "Failed to update password. Please try again.");
         }
 
-        // Invalidate OTP to prevent replay
-        latestOtp.AttemptCount = 99; // Flag as consumed
+        // Invalidate OTP to prevent replay (set to MaxOtpAttempts instead of magic number 99)
+        latestOtp.AttemptCount = MaxOtpAttempts;
         await _authRepository.UpdateOtpAsync(latestOtp);
 
         return (true, "Password has been reset successfully. You can now log in with your new password.");
@@ -305,11 +327,11 @@ public class AuthService : IAuthService
         }
     }
 
-    private static string MaskIdentifier(string identifier)
+    private static string MaskEmail(string email)
     {
-        if (identifier.Contains('@'))
+        if (email.Contains('@'))
         {
-            var parts = identifier.Split('@');
+            var parts = email.Split('@');
             var name = parts[0];
             var domain = parts[1];
             var maskedName = name.Length <= 2
@@ -318,8 +340,8 @@ public class AuthService : IAuthService
             return $"{maskedName}@{domain}";
         }
 
-        return identifier.Length <= 4
+        return email.Length <= 4
             ? "****"
-            : new string('*', identifier.Length - 4) + identifier[^4..];
+            : new string('*', email.Length - 4) + email[^4..];
     }
 }

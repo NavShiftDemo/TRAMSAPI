@@ -30,7 +30,7 @@ public class AuthController : ControllerBase
         {
             return Unauthorized(new
             {
-                message = "Invalid email/phone or password."
+                message = "Invalid email or password."
             });
         }
 
@@ -38,7 +38,7 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
-    /// Sends OTP for password reset to registered email/phone.
+    /// Sends OTP for password reset to registered email.
     /// </summary>
     [HttpPost("forgot-password")]
     public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDto request)

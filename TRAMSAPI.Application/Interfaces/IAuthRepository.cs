@@ -5,7 +5,7 @@ namespace TRAMSAPI.Application.Interfaces;
 
 public interface IAuthRepository
 {
-    Task<User?> GetUserByIdentifierAsync(string identifier);
+    Task<User?> GetUserByEmailAsync(string email);
     Task<User?> GetUserByIdAsync(long userId);
     Task RecordLoginHistoryAsync(UserLoginHistory history);
     Task SaveOtpAsync(UserOtpVerification otp);
