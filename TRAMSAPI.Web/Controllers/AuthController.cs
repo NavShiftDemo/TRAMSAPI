@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using TRAMSAPI.Application.DTOs.Auth;
 using TRAMSAPI.Application.Interfaces;
 
@@ -19,6 +20,7 @@ public class AuthController : ControllerBase
     /// Authenticates user and returns JWT token.
     /// </summary>
     [HttpPost("login")]
+    [EnableRateLimiting("LoginLimiter")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
     {
         var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
